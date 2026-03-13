@@ -9,25 +9,27 @@ import WellnessRecommendations from '@/components/WellnessRecommendations'
 const assessmentCards = [
   {
     id: 1,
-    label: 'Problem Statement',
-    emoji: '💜',
+    label: 'Depression Screen (PHQ-9)',
+    href: '/assessment/phq9',
+    emoji: '🌧️',
     bg: 'bg-white',
-    textColor: 'text-gray-900',
-    labelColor: 'text-purple-400',
-    labelBg: 'bg-purple-50',
+    textColor: 'text-slate-900',
+    labelColor: 'text-slate-700',
+    labelBg: 'bg-slate-100',
     content:
-      'Many struggle with their emotions and maintaining wellness routines. Most mental health apps can feel overwhelming, complicating emotional care.',
+      'A clinically validated 9-question tool to measure the severity of depression symptoms over the last two weeks.',
   },
   {
     id: 2,
-    label: 'Our Solution 1',
-    emoji: '🔵',
-    bg: 'bg-gradient-to-br from-[#714efe] to-[#9d7ffb]',
-    textColor: 'text-white',
-    labelColor: 'text-white/80',
-    labelBg: 'bg-white/20',
+    label: 'Anxiety Screen (GAD-7)',
+    href: '/assessment/gad7',
+    emoji: '⚡',
+    bg: 'bg-white',
+    textColor: 'text-slate-900',
+    labelColor: 'text-slate-700',
+    labelBg: 'bg-slate-100',
     content:
-      'A new approach is vital for helping people grasp their emotions and maintain wellness habits. Our app offers personalized support for easier emotional care.',
+      'A clinically validated 7-question tool to measure the severity of generalized anxiety symptoms over the last two weeks.',
   },
   {
     id: 3,
@@ -78,17 +80,17 @@ const assessmentCards = [
 
 export default function AssessmentPage() {
   return (
-    <div className="pb-28 min-h-screen bg-[#efebf0]">
+    <div className="pb-28 min-h-screen bg-slate-50">
       {/* Header */}
       <div className="pt-10 px-6 mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-9 h-9 bg-purple-100 rounded-2xl flex items-center justify-center">
-            <ClipboardList className="w-5 h-5 text-[#714efe]" />
+          <div className="w-9 h-9 bg-slate-200 rounded-2xl flex items-center justify-center">
+            <ClipboardList className="w-5 h-5 text-slate-700" />
           </div>
-          <p className="text-sm text-gray-400 font-medium">Weekly</p>
+          <p className="text-sm text-slate-500 font-medium">Clinical Tools</p>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Assessment</h1>
-        <p className="text-gray-500 text-sm mt-1">Understand yourself better</p>
+        <h1 className="text-2xl font-bold text-slate-900">Assessments</h1>
+        <p className="text-slate-500 text-sm mt-1">Track your symptoms over time</p>
       </div>
 
       {/* Recommendations Section */}
@@ -126,8 +128,8 @@ export default function AssessmentPage() {
             </motion.div>
           )
 
-          return card.link ? (
-            <Link key={card.id} href={card.link}>
+          return card.link || card.href ? (
+            <Link key={card.id} href={card.link || card.href || '#'}>
               {CardContent}
             </Link>
           ) : (

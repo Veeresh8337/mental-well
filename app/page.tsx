@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
 import MoodSelector from "@/components/MoodSelector";
@@ -16,6 +15,19 @@ export default async function Home() {
   const firstName = fullName.split(' ')[0];
   const profilePhoto = user?.user_metadata?.avatar_url;
 
+  // Fetch most recent mood entry (only if user is logged in)
+  let lastMood: string | null = null;
+  if (user?.id) {
+    const { data: lastEntry } = await supabase
+      .from('mood_entries')
+      .select('mood')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();  // won't error if no rows found
+    lastMood = lastEntry?.mood ?? null;
+  }
+
   return (
     <>
     <div className="pb-24">
@@ -30,13 +42,12 @@ export default async function Home() {
         </p>
       </div>
 
-      <MoodSelector />
+      <MoodSelector lastMood={lastMood} />
       
       <div className="mt-4 mb-2">
         <h2 className="px-6 text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Daily Tips</h2>
         <WellnessRecommendations />
       </div>
-
       <HeroCard />
       <AICard />
       <EnergySection />
