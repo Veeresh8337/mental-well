@@ -3,6 +3,7 @@ import WeeklyCheckIn from "@/components/WeeklyCheckIn";
 import TopEmotions from "@/components/TopEmotions";
 import WeeklyReflection from "@/components/WeeklyReflection";
 import BottomNav from "@/components/BottomNav";
+import ClinicalHistoryChart from "@/components/ClinicalHistoryChart";
 import { ChevronDown } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -14,7 +15,14 @@ export default async function AnalyticsPage() {
 
   if (!user) redirect("/login");
 
-  const stats = await getUserStats(user.id);
+  const [stats, { data: assessments }] = await Promise.all([
+    getUserStats(user.id),
+    supabase
+      .from('clinical_assessments')
+      .select('id, created_at, total_score, assessment_type')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+  ]);
 
   return (
     <div className="pb-28 min-h-screen bg-[#efebf0]">
@@ -58,6 +66,18 @@ export default async function AnalyticsPage() {
       {/* Weekly Reflection */}
       <div className="px-6 mb-4">
         <WeeklyReflection />
+      </div>
+
+      {/* Clinical Assessment History */}
+      <div className="px-6 mb-4 space-y-4">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+            <span className="text-xl">📊</span>
+          </div>
+          <h2 className="text-xl font-bold text-slate-900">Clinical History</h2>
+        </div>
+        <ClinicalHistoryChart data={assessments || []} type="PHQ9" />
+        <ClinicalHistoryChart data={assessments || []} type="GAD7" />
       </div>
 
       <BottomNav />

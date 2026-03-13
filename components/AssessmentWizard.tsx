@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 
 // We require all questions to be answered (0-3) before continuing
 const buildSchema = (numQuestions: number) => {
-  const shape: Record<string, z.ZodNumber> = {}
+  const shape: Record<string, z.ZodTypeAny> = {}
   for (let i = 1; i <= numQuestions; i++) {
     shape[`q${i}`] = z.coerce.number().int().min(0).max(3)
   }
@@ -39,6 +39,16 @@ const PHQ9_QUESTIONS: Question[] = [
   { id: 'q9', text: 'Thoughts that you would be better off dead, or of hurting yourself in some way?' },
 ]
 
+const GAD7_QUESTIONS: Question[] = [
+  { id: 'q1', text: 'Feeling nervous, anxious, or on edge?' },
+  { id: 'q2', text: 'Not being able to stop or control worrying?' },
+  { id: 'q3', text: 'Worrying too much about different things?' },
+  { id: 'q4', text: 'Trouble relaxing?' },
+  { id: 'q5', text: 'Being so restless that it is hard to sit still?' },
+  { id: 'q6', text: 'Becoming easily annoyed or irritable?' },
+  { id: 'q7', text: 'Feeling afraid, as if something awful might happen?' },
+]
+
 const OPTIONS = [
   { value: 0, label: 'Not at all' },
   { value: 1, label: 'Several days' },
@@ -52,7 +62,7 @@ interface AssessmentWizardProps {
 
 export default function AssessmentWizard({ type }: AssessmentWizardProps) {
   const router = useRouter()
-  const questions = type === 'PHQ9' ? PHQ9_QUESTIONS : [] // Add GAD7
+  const questions = type === 'PHQ9' ? PHQ9_QUESTIONS : GAD7_QUESTIONS
   const schema = buildSchema(questions.length)
   
   const [step, setStep] = useState(0)
@@ -84,7 +94,7 @@ export default function AssessmentWizard({ type }: AssessmentWizardProps) {
     const endIdx = startIdx + QUESTIONS_PER_PAGE
     const pageQuestions = questions.slice(startIdx, endIdx)
     
-    const allAnswered = pageQuestions.every(q => watch(q.id) !== undefined && watch(q.id) !== "")
+    const allAnswered = pageQuestions.every(q => watch(q.id) !== undefined && String(watch(q.id)) !== "")
     if (allAnswered && step < totalPages - 1) {
       setStep(s => s + 1)
     }
@@ -148,7 +158,7 @@ export default function AssessmentWizard({ type }: AssessmentWizardProps) {
   // Determine if current page can proceed
   const canProceed = currentQuestions.every(q => {
     const val = watch(q.id)
-    return val !== undefined && val !== "" && !errors[q.id]
+    return val !== undefined && String(val) !== "" && !errors[q.id]
   })
 
   return (
