@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.variable} font-sans antialiased text-[#1c1c1e]`}>
-        <div className="mx-auto max-w-md min-h-screen bg-[#efebf0] relative shadow-2xl overflow-hidden pb-24">
+        <div className="mx-auto max-w-md min-h-screen bg-[#efebf0] relative shadow-2xl overflow-hidden">
           {children}
         </div>
       </body>

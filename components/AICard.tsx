@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 export default function AICard() {
   return (
-    <div className="mx-6 mb-4 relative overflow-hidden rounded-[2rem] bg-[#e6e2ea] p-5 shadow-sm">
+    <Link href="/chat" className="block mx-6 mb-4 relative overflow-hidden rounded-[2rem] bg-[#e6e2ea] p-5 shadow-sm active:scale-[0.98] transition-transform">
       <div className="flex items-center space-x-4">
         {/* Circle Icon */}
         <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-[#cbbcf6]">
@@ -37,6 +39,6 @@ export default function AICard() {
           />
         </svg>
       </div>
-    </div>
+    </Link>
   );
 }

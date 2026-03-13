@@ -8,6 +8,7 @@ import BottomNav from "@/components/BottomNav";
 export default function Home() {
   return (
     <>
+    <div className="pb-24">
       <Header />
       
       <div className="px-6 mb-5">
@@ -25,6 +26,7 @@ export default function Home() {
       <EnergySection />
       
       <BottomNav />
+    </div>
     </>
   );
 }
