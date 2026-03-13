@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
 import MoodSelector from "@/components/MoodSelector";
+import WellnessRecommendations from "@/components/WellnessRecommendations";
 import HeroCard from "@/components/HeroCard";
 import AICard from "@/components/AICard";
 import EnergySection from "@/components/EnergySection";
@@ -10,9 +11,9 @@ export default async function Home() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Get first name only (e.g. "Veeresh Hindiholi" → "Veeresh")
   const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there';
   const firstName = fullName.split(' ')[0];
+  const profilePhoto = user?.user_metadata?.avatar_url;
 
   // Fetch most recent mood entry (only if user is logged in)
   let lastMood: string | null = null;
@@ -30,7 +31,7 @@ export default async function Home() {
   return (
     <>
     <div className="pb-24">
-      <Header />
+      <Header profilePhoto={profilePhoto} fullName={fullName} />
       
       <div className="px-6 mb-5">
         <h1 className="text-[1.65rem] text-gray-900 font-medium leading-tight">
@@ -42,6 +43,11 @@ export default async function Home() {
       </div>
 
       <MoodSelector lastMood={lastMood} />
+      
+      <div className="mt-4 mb-2">
+        <h2 className="px-6 text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Daily Tips</h2>
+        <WellnessRecommendations />
+      </div>
       <HeroCard />
       <AICard />
       <EnergySection />

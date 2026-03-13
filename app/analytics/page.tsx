@@ -2,6 +2,7 @@ import MoodTrendChart from "@/components/MoodTrendChart";
 import WeeklyCheckIn from "@/components/WeeklyCheckIn";
 import TopEmotions from "@/components/TopEmotions";
 import WeeklyReflection from "@/components/WeeklyReflection";
+import GamesActivity from "@/components/GamesActivity";
 import BottomNav from "@/components/BottomNav";
 import ClinicalHistoryChart from "@/components/ClinicalHistoryChart";
 import { ChevronDown } from "lucide-react";
@@ -78,6 +79,11 @@ export default async function AnalyticsPage() {
         </div>
         <ClinicalHistoryChart data={assessments || []} type="PHQ9" />
         <ClinicalHistoryChart data={assessments || []} type="GAD7" />
+      </div>
+
+      {/* Games Activity */}
+      <div className="px-6 mb-4">
+        <GamesActivity />
       </div>
 
       <BottomNav />
